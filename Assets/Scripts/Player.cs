@@ -1,10 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : BaseUnit
 {
     private float horizontalInput;
-    [SerializeField]
-    private Animator animator;
     private bool isFacingRight = true;
     private bool isJumping = false;
     private bool isGrounded = true;
@@ -29,12 +28,13 @@ public class Player : BaseUnit
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         Move();
+        if (Input.GetMouseButtonDown(0) && hasCooldown) Attack();
         SetAnimatorParameter();
     }
     void Move()
     {
         Vector2 v = rb.linearVelocity;
-        if (!isWallJumping) v.x = horizontalInput * speed;
+        if (!isWallJumping) v.x = horizontalInput * speedX;
         if (GroundCheck())
         {
             isGrounded = true;
@@ -54,23 +54,40 @@ public class Player : BaseUnit
             if (isGrounded)
             {
                 isJumping = true;
-                v.y = jumpSpeed;
+                v.y = speedY;
             }
             else if (isWallSliding)
             {
                 isWallJumping = true;
-                v.y = jumpSpeed;
+                v.y = speedY;
                 float jumpDirection = -transform.localScale.x / 4;
-                v.x = jumpDirection * speed;
+                v.x = jumpDirection * speedX;
             }
         }
         Flip(v);
         rb.linearVelocity = v;
     }
+    private void Attack()
+    {
+        isAttacking = true;
+        hasCooldown = false;
+        StartCoroutine(AttackAnimation());
+        StartCoroutine(AttackCooldown());
+    }
+    private IEnumerator AttackAnimation()
+    {   
+        yield return new WaitForSeconds(0.667f);
+        isAttacking = false;
+    }
+    private IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        hasCooldown = true;
+    }
     private void Flip(Vector3 v)
     {
-        if(v.x > 0) transform.localScale = new Vector3(4, 4, 4);
-        else if(v.x < 0) transform.localScale = new Vector3(-4, 4, 4);
+        if (v.x > 0) transform.localScale = new Vector3(4, 4, 4);
+        else if (v.x < 0) transform.localScale = new Vector3(-4, 4, 4);
     }
     private bool GroundCheck()
     {
@@ -87,6 +104,7 @@ public class Player : BaseUnit
         animator.SetBool("IsJumping", isJumping);
         animator.SetBool("IsWallSticking", isWallSticking);
         animator.SetBool("IsWallJumping", isWallJumping);
+        animator.SetBool("IsAttacking", isAttacking);
     }
     private void OnDrawGizmosSelected()
     {
