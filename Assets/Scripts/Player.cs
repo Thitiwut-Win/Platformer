@@ -1,15 +1,17 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : BaseUnit
 {
     private float horizontalInput;
-    private bool isFacingRight = true;
-    private bool isJumping = false;
     private bool isGrounded = true;
     private bool isWallSliding = false;
     private bool isWallSticking = false;
     private bool isWallJumping = false;
+    public List<Enemy> enemyList;
+    [SerializeField]
+    private SpriteRenderer spriteRenderer;
     [Header("GroundCheck")]
     [SerializeField]
     private LayerMask isGround;
@@ -35,25 +37,18 @@ public class Player : BaseUnit
     {
         Vector2 v = rb.linearVelocity;
         if (!isWallJumping) v.x = horizontalInput * speedX;
-        if (GroundCheck())
-        {
-            isGrounded = true;
-            isJumping = false;
-            isWallJumping = false;
-        }
-        else isGrounded = false;
-        if (WallCheck() && !isGrounded && v.x != 0)
+        GroundCheck();
+        if (WallCheck() && !isGrounded && horizontalInput != 0)
         {
             isWallSliding = true;
-            isWallJumping = false;
         }
         else isWallSliding = false;
-        if (Input.GetKey(KeyCode.Space))
+        // if (!isGrounded) v.y -= 9.81f;
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            print(isGrounded);
             if (isGrounded)
             {
-                isJumping = true;
+                animator.SetBool("IsJumping", true);
                 v.y = speedY;
             }
             else if (isWallSliding)
@@ -64,13 +59,17 @@ public class Player : BaseUnit
                 v.x = jumpDirection * speedX;
             }
         }
-        Flip(v);
         rb.linearVelocity = v;
+        Flip();
     }
     private void Attack()
     {
         isAttacking = true;
         hasCooldown = false;
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.GetHit(damage);
+        }
         StartCoroutine(AttackAnimation());
         StartCoroutine(AttackCooldown());
     }
@@ -84,27 +83,33 @@ public class Player : BaseUnit
         yield return new WaitForSeconds(attackCooldown);
         hasCooldown = true;
     }
-    private void Flip(Vector3 v)
+    private void GroundCheck()
     {
-        if (v.x > 0) transform.localScale = new Vector3(4, 4, 4);
-        else if (v.x < 0) transform.localScale = new Vector3(-4, 4, 4);
-    }
-    private bool GroundCheck()
-    {
-        return Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0, isGround);
+        bool wasGrounded = isGrounded;
+        isGrounded = false;
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(groundCheck.position, groundCheckSize, 0, isGround);
+        for (int i = 0; i < colliders.Length; i++)
+		{
+			if (colliders[i].gameObject != gameObject)
+			{
+				isGrounded = true;
+                if (!wasGrounded) animator.SetBool("IsJumping", false);
+			}
+		}
     }
     private bool WallCheck()
     {
         return Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0, isWall);
     }
-    private void SetAnimatorParameter()
+    public override void SetAnimatorParameter()
     {
+        base.SetAnimatorParameter();
         animator.SetFloat("SpeedX", Mathf.Abs(horizontalInput));
         animator.SetFloat("SpeedY", rb.linearVelocityY);
-        animator.SetBool("IsJumping", isJumping);
-        animator.SetBool("IsWallSticking", isWallSticking);
-        animator.SetBool("IsWallJumping", isWallJumping);
-        animator.SetBool("IsAttacking", isAttacking);
+    }
+    public bool IsAttacking()
+    {
+        return isAttacking;
     }
     private void OnDrawGizmosSelected()
     {

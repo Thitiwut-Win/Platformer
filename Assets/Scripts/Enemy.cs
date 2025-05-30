@@ -5,58 +5,72 @@ using UnityEngine;
 public class Enemy : BaseUnit
 {
     private int id = 0;
-    private bool hasMove = false;
+    private Vector2 direction;
+    public float moveTime;
+    private EState eState = EState.IDLE;
     [SerializeField]
-    Vector2 direction;
-    [SerializeField]
-    List<Pair<int, int>> MoveCycle;
+    private List<Vector2> MoveCycle;
     void Start()
     {
         StartCoroutine(ChangeDirection());
     }
     void Update()
     {
-        if (!hasMove) Move();
+        SetAnimatorParameter();
+    }
+    private void Attack()
+    {
+        isAttacking = true;
+        hasCooldown = false;
+        StartCoroutine(AttackAnimation());
+        StartCoroutine(AttackCooldown());
+    }
+    private IEnumerator AttackAnimation()
+    {   
+        yield return new WaitForSeconds(attackTime);
+        isAttacking = false;
+    }
+    private IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        hasCooldown = true;
     }
     void Move()
     {
         rb.linearVelocityX = direction.x * speedX;
         rb.linearVelocityY = direction.y * speedY;
-        StartCoroutine(StopMoving());
+        Flip();
     }
     private IEnumerator StopMoving()
     {
-        hasMove = true;
-        yield return new WaitForSeconds(3);
-        hasMove = false;
+        yield return new WaitForSeconds(moveTime);
+        direction.x = 0;
+        direction.y = 0;
+        eState = EState.IDLE;
+        Move();
     }
     private IEnumerator ChangeDirection()
     {
-        yield return new WaitForSeconds(6);
-        direction.x *= MoveCycle[id].first;
-        direction.y *= MoveCycle[id].second;
+        yield return new WaitForSeconds(moveTime * 2);
+        direction.x = MoveCycle[id].x;
+        direction.y = MoveCycle[id].y;
         id++;
+        eState = EState.MOVE;
         if (id >= MoveCycle.Count) id = 0;
         StartCoroutine(ChangeDirection());
+        Move();
+        StartCoroutine(StopMoving());
     }
-    private void SetAnimatorParameter()
+    public void OnTriggerEnter2D(Collider2D collider2D)
     {
+        if (collider2D.TryGetComponent(out Player player))
+        {
+            player.GetHit(damage);
+        }
+    }
+    public override void SetAnimatorParameter()
+    {
+        base.SetAnimatorParameter();
         animator.SetFloat("SpeedX", Mathf.Abs(rb.linearVelocityX));
-        animator.SetBool("IsAttacking", isAttacking);
     }
-}
-
-class Pair<T, U>
-{
-    public Pair()
-    {}
-
-    public Pair(T first, U second)
-    {
-        this.first = first;
-        this.second = second;
-    }
-
-    public T first { get; set; }
-    public U second { get; set; }
 }

@@ -112,20 +112,20 @@ TextureImporter:
       name: Character-falling_0
       rect:
         serializedVersion: 2
-        x: 29
+        x: 0
         y: 0
-        width: 29
-        height: 60
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c35651bb3c596f460800000000000000
-      internalID: 7275166915953517884
+      spriteID: 18b498e523c6e2b47960e8b55fee91fb
+      internalID: -1009923295
       vertices: []
       indices: 
       edges: []
@@ -134,20 +134,20 @@ TextureImporter:
       name: Character-falling_1
       rect:
         serializedVersion: 2
-        x: 126
+        x: 96
         y: 0
-        width: 28
-        height: 60
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 47f5c13d4014027b0800000000000000
-      internalID: -5251125676536471692
+      spriteID: fc2070efe4ea472438870ead9cff813e
+      internalID: 158450987
       vertices: []
       indices: 
       edges: []
@@ -156,20 +156,20 @@ TextureImporter:
       name: Character-falling_2
       rect:
         serializedVersion: 2
-        x: 223
+        x: 192
         y: 0
-        width: 27
-        height: 60
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 45539357cdc8b8e80800000000000000
-      internalID: -8175285820073626284
+      spriteID: 654c72487cf3ae24aa6e5a33752e56ce
+      internalID: 383912436
       vertices: []
       indices: 
       edges: []
@@ -178,20 +178,20 @@ TextureImporter:
       name: Character-falling_3
       rect:
         serializedVersion: 2
-        x: 318
+        x: 288
         y: 0
-        width: 28
-        height: 60
+        width: 96
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ebadd14caed34c5a0800000000000000
-      internalID: -6502003883494221122
+      spriteID: 03467581d6ef1e446a47288a577b3b78
+      internalID: 1357372454
       vertices: []
       indices: 
       edges: []
@@ -200,7 +200,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 3805125b5d3974a4d812b1585def92af
     internalID: 0
     vertices: []
     indices: 
@@ -209,7 +209,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Character-falling_0: -1009923295
+      Character-falling_1: 158450987
+      Character-falling_2: 383912436
+      Character-falling_3: 1357372454
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
