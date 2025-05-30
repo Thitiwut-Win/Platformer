@@ -6,8 +6,8 @@ public class Player : BaseUnit
 {
     private float horizontalInput;
     private bool isGrounded = true;
+    private bool isWalled = false;
     private bool isWallSliding = false;
-    private bool isWallSticking = false;
     private bool isWallJumping = false;
     public List<Enemy> enemyList;
     [SerializeField]
@@ -38,27 +38,36 @@ public class Player : BaseUnit
         Vector2 v = rb.linearVelocity;
         if (!isWallJumping) v.x = horizontalInput * speedX;
         GroundCheck();
-        if (WallCheck() && !isGrounded && horizontalInput != 0)
+        WallCheck();
+        if (isWalled && !isGrounded && horizontalInput != 0)
         {
             isWallSliding = true;
+            animator.SetBool("IsWallSliding", true);
         }
-        else isWallSliding = false;
-        // if (!isGrounded) v.y -= 9.81f;
-        if (Input.GetKeyDown(KeyCode.Space))
+        else
         {
-            if (isGrounded)
-            {
-                animator.SetBool("IsJumping", true);
-                v.y = speedY;
-            }
-            else if (isWallSliding)
-            {
-                isWallJumping = true;
-                v.y = speedY;
-                float jumpDirection = -transform.localScale.x / 4;
-                v.x = jumpDirection * speedX;
-            }
+            isWallSliding = false;
+            animator.SetBool("IsWallSliding", false);
         }
+        // if (!isGrounded) v.y -= 9.81f;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (isGrounded)
+                {
+                    animator.SetBool("IsJumping", true);
+                    v.y = speedY;
+                }
+                else if (isWallSliding)
+                {
+                    isWallSliding = false;
+                    isWallJumping = true;
+                    animator.SetBool("IsWallSliding", false);
+                    animator.SetBool("IsWallJumping", true);
+                    v.y = speedY;
+                    float jumpDirection = -transform.localScale.x / 4;
+                    v.x = jumpDirection * speedX;
+                }
+            }
         rb.linearVelocity = v;
         Flip();
     }
@@ -93,13 +102,33 @@ public class Player : BaseUnit
 			if (colliders[i].gameObject != gameObject)
 			{
 				isGrounded = true;
-                if (!wasGrounded) animator.SetBool("IsJumping", false);
+                if (!wasGrounded)
+                {
+                    isWallSliding = false;
+                    isWallJumping = false;
+                    animator.SetBool("IsJumping", false);
+                    animator.SetBool("IsWallSliding", false);
+                    animator.SetBool("IsWallJumping", false);
+                }
 			}
 		}
     }
-    private bool WallCheck()
+    private void WallCheck()
     {
-        return Physics2D.OverlapBox(wallCheck.position, wallCheckSize, 0, isWall);
+        isWalled = false;
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(wallCheck.position, wallCheckSize, 0, isWall);
+        for (int i = 0; i < colliders.Length; i++)
+		{
+            if (colliders[i].gameObject != gameObject)
+            {
+                isWalled = true;
+                isWallSliding = false;
+                isWallJumping = false;
+                animator.SetBool("IsJumping", false);
+                animator.SetBool("IsWallSliding", false);
+                animator.SetBool("IsWallJumping", false);
+			}
+		}
     }
     public override void SetAnimatorParameter()
     {
