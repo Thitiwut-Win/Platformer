@@ -6,6 +6,8 @@ public class BaseUnit : MonoBehaviour
     public float health;
     public float maxHealth;
     public float damage;
+    public Vector2 power;
+    public float weight;
     public float speedX;
     public float speedY;
     public float scale;
@@ -15,6 +17,7 @@ public class BaseUnit : MonoBehaviour
     protected bool isAttacking = false;
     public bool hasCooldown = true;
     protected bool isHit = false;
+    protected bool isKnockback = false;
     protected bool isDead = false;
     [SerializeField]
     protected Animator animator;
@@ -47,18 +50,45 @@ public class BaseUnit : MonoBehaviour
             isFacingRight = false;
         }
     }
-    public void GetHit(float dmg)
+    public void GetHit(BaseUnit other)
     {
         if (!isHit)
         {
             isHit = true;
-            health -= dmg;
+            health -= other.damage;
+            GetKnockback(other);
             StartCoroutine(HurtAnimation());
             if (health <= 0 && !isDead)
             {
                 StartCoroutine(DieAnimation());
             }
         }
+    }
+    private void GetKnockback(BaseUnit other)
+    {
+        int direc;
+        if (isFacingRight != other.isFacingRight)
+        {
+            if (other.isFacingRight) direc = 1;
+            else direc = -1;
+        }
+        else
+        {
+            if (other.transform.position.x < transform.position.x && isFacingRight) direc = 1;
+            else if (other.transform.position.x > transform.position.x && !isFacingRight) direc = -1;
+            else direc = other.isFacingRight ? -1 : 1;
+
+        }
+        rb.linearVelocityX = power.x / weight * direc;
+        rb.linearVelocityY = power.y / weight;
+        isKnockback = true;
+        StartCoroutine(Knockback());
+    }
+    private IEnumerator Knockback()
+    {
+        yield return new WaitForSeconds(0.1f);
+        isKnockback = false;
+        rb.linearVelocityX = 0;
     }
     private IEnumerator HurtAnimation()
     {

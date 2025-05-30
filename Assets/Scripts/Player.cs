@@ -36,7 +36,7 @@ public class Player : BaseUnit
     void Move()
     {
         Vector2 v = rb.linearVelocity;
-        if (!isWallJumping) v.x = horizontalInput * speedX;
+        if (!isWallJumping && !isKnockback) v.x = horizontalInput * speedX;
         GroundCheck();
         WallCheck();
         if (isWalled && !isGrounded && horizontalInput != 0)
@@ -69,7 +69,7 @@ public class Player : BaseUnit
                 }
             }
         rb.linearVelocity = v;
-        Flip();
+        if(!isKnockback) Flip();
     }
     private void Attack()
     {
@@ -77,7 +77,8 @@ public class Player : BaseUnit
         hasCooldown = false;
         foreach (Enemy enemy in enemyList)
         {
-            enemy.GetHit(damage);
+            int direc = isFacingRight ? 1 : -1;
+            enemy.GetHit(this);
         }
         StartCoroutine(AttackAnimation());
         StartCoroutine(AttackCooldown());

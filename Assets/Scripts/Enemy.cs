@@ -61,13 +61,6 @@ public class Enemy : BaseUnit
         Move();
         StartCoroutine(StopMoving());
     }
-    public void OnTriggerEnter2D(Collider2D collider2D)
-    {
-        if (collider2D.TryGetComponent(out Player player))
-        {
-            player.GetHit(damage);
-        }
-    }
     public override void SetAnimatorParameter()
     {
         base.SetAnimatorParameter();
