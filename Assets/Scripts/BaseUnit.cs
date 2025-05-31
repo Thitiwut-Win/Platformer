@@ -12,10 +12,11 @@ public class BaseUnit : MonoBehaviour
     public float speedY;
     public float scale;
     public bool isFacingRight = true;
+    public float preAttackTime;
     public float attackTime;
     public float attackCooldown;
-    protected bool isAttacking = false;
     public bool hasCooldown = true;
+    public bool isAttacking = false;
     protected bool isHit = false;
     protected bool isKnockback = false;
     protected bool isDead = false;
@@ -91,6 +92,11 @@ public class BaseUnit : MonoBehaviour
         isKnockback = false;
         rb.linearVelocityX = 0;
     }
+    protected IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        hasCooldown = true;
+    }
     private IEnumerator HurtAnimation()
     {
         yield return new WaitForSeconds(0.7f);
@@ -102,6 +108,10 @@ public class BaseUnit : MonoBehaviour
         rb.simulated = false;
         yield return new WaitForSeconds(2);
         Destroy(gameObject);
+    }
+    public bool IsAttacking()
+    {
+        return isAttacking;
     }
     public virtual void SetAnimatorParameter()
     {

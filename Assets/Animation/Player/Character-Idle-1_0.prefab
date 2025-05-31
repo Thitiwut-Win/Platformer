@@ -137,9 +137,11 @@ MonoBehaviour:
   speedY: 7.5
   scale: 4
   isFacingRight: 1
-  attackTime: 0
+  preAttackTime: 0.3335
+  attackTime: 0.3335
   attackCooldown: 1
   hasCooldown: 1
+  isAttacking: 0
   animator: {fileID: 7112128324179521521}
   enemyList: []
   spriteRenderer: {fileID: 3594218193891235189}

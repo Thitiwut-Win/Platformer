@@ -10,6 +10,7 @@ public class Enemy : BaseUnit
     private EState eState = EState.IDLE;
     [SerializeField]
     private List<Vector2> MoveCycle;
+    private Player target;
     void Start()
     {
         StartCoroutine(ChangeDirection());
@@ -17,8 +18,9 @@ public class Enemy : BaseUnit
     void Update()
     {
         SetAnimatorParameter();
+        if (hasCooldown && target != null) Attack();
     }
-    private void Attack()
+    public void Attack()
     {
         isAttacking = true;
         hasCooldown = false;
@@ -26,14 +28,11 @@ public class Enemy : BaseUnit
         StartCoroutine(AttackCooldown());
     }
     private IEnumerator AttackAnimation()
-    {   
+    {
+        yield return new WaitForSeconds(preAttackTime);
+        target?.GetHit(this);
         yield return new WaitForSeconds(attackTime);
         isAttacking = false;
-    }
-    private IEnumerator AttackCooldown()
-    {
-        yield return new WaitForSeconds(attackCooldown);
-        hasCooldown = true;
     }
     void Move()
     {
@@ -60,6 +59,10 @@ public class Enemy : BaseUnit
         StartCoroutine(ChangeDirection());
         Move();
         StartCoroutine(StopMoving());
+    }
+    public void SetTarget(Player player)
+    {
+        target = player;
     }
     public override void SetAnimatorParameter()
     {

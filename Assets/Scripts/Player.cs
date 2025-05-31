@@ -75,23 +75,19 @@ public class Player : BaseUnit
     {
         isAttacking = true;
         hasCooldown = false;
-        foreach (Enemy enemy in enemyList)
-        {
-            int direc = isFacingRight ? 1 : -1;
-            enemy.GetHit(this);
-        }
+        
         StartCoroutine(AttackAnimation());
         StartCoroutine(AttackCooldown());
     }
     private IEnumerator AttackAnimation()
-    {   
-        yield return new WaitForSeconds(0.667f);
-        isAttacking = false;
-    }
-    private IEnumerator AttackCooldown()
     {
-        yield return new WaitForSeconds(attackCooldown);
-        hasCooldown = true;
+        yield return new WaitForSeconds(preAttackTime);
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.GetHit(this);
+        }
+        yield return new WaitForSeconds(attackTime);
+        isAttacking = false;
     }
     private void GroundCheck()
     {
@@ -99,10 +95,10 @@ public class Player : BaseUnit
         isGrounded = false;
         Collider2D[] colliders = Physics2D.OverlapBoxAll(groundCheck.position, groundCheckSize, 0, isGround);
         for (int i = 0; i < colliders.Length; i++)
-		{
-			if (colliders[i].gameObject != gameObject)
-			{
-				isGrounded = true;
+        {
+            if (colliders[i].gameObject != gameObject)
+            {
+                isGrounded = true;
                 if (!wasGrounded)
                 {
                     isWallSliding = false;
@@ -111,8 +107,8 @@ public class Player : BaseUnit
                     animator.SetBool("IsWallSliding", false);
                     animator.SetBool("IsWallJumping", false);
                 }
-			}
-		}
+            }
+        }
     }
     private void WallCheck()
     {
@@ -136,10 +132,6 @@ public class Player : BaseUnit
         base.SetAnimatorParameter();
         animator.SetFloat("SpeedX", Mathf.Abs(horizontalInput));
         animator.SetFloat("SpeedY", rb.linearVelocityY);
-    }
-    public bool IsAttacking()
-    {
-        return isAttacking;
     }
     private void OnDrawGizmosSelected()
     {
