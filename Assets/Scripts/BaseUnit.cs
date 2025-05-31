@@ -60,6 +60,7 @@ public class BaseUnit : MonoBehaviour
             StartCoroutine(HurtAnimation());
             if (health <= 0 && !isDead)
             {
+                isDead = true;
                 StartCoroutine(DieAnimation());
             }
         }
@@ -98,7 +99,6 @@ public class BaseUnit : MonoBehaviour
     private IEnumerator DieAnimation()
     {
         yield return new WaitForSeconds(0.7f);
-        isDead = true;
         rb.simulated = false;
         yield return new WaitForSeconds(2);
         Destroy(gameObject);
