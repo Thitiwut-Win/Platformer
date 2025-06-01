@@ -235,9 +235,10 @@ MonoBehaviour:
   isAttacking: 0
   animator: {fileID: 9218330083392315}
   moveTime: 5
-  MoveCycle:
-  - {x: 1, y: 0}
+  waitTime: 5
+  moveCycle:
   - {x: -1, y: 0}
+  - {x: 1, y: 0}
 --- !u!50 &6921720827245643958
 Rigidbody2D:
   serializedVersion: 5

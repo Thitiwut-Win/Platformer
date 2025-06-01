@@ -7,9 +7,10 @@ public class Enemy : BaseUnit
     private int id = 0;
     private Vector2 direction;
     public float moveTime;
+    public float waitTime;
+    public bool willWait = true;
     private EState eState = EState.IDLE;
-    [SerializeField]
-    private List<Vector2> MoveCycle;
+    public List<Vector2> moveCycle;
     private Player target;
     void Start()
     {
@@ -50,15 +51,15 @@ public class Enemy : BaseUnit
     }
     private IEnumerator ChangeDirection()
     {
-        yield return new WaitForSeconds(moveTime * 2);
-        direction.x = MoveCycle[id].x;
-        direction.y = MoveCycle[id].y;
+        yield return new WaitForSeconds(moveTime + waitTime);
+        direction.x = moveCycle[id].x;
+        direction.y = moveCycle[id].y;
         id++;
         eState = EState.MOVE;
-        if (id >= MoveCycle.Count) id = 0;
+        if (id >= moveCycle.Count) id = 0;
         StartCoroutine(ChangeDirection());
         Move();
-        StartCoroutine(StopMoving());
+        if (willWait) StartCoroutine(StopMoving());
     }
     public void SetTarget(Player player)
     {
