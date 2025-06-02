@@ -51,6 +51,29 @@ public class BaseUnit : MonoBehaviour
             isFacingRight = false;
         }
     }
+    public void GetHit(Trap trap)
+    {
+        if (!isHit)
+        {
+            isHit = true;
+            health -= trap.damage;
+            GetKnockback(trap);
+            StartCoroutine(HurtAnimation());
+            if (health <= 0 && !isDead)
+            {
+                isDead = true;
+                StartCoroutine(DieAnimation());
+            }
+        }
+    }
+    private void GetKnockback(Trap trap)
+    {
+        int direc = isFacingRight ? -1 : 1;
+        rb.linearVelocityX = trap.power.x / weight * direc;
+        rb.linearVelocityY = trap.power.y / weight;
+        isKnockback = true;
+        StartCoroutine(Knockback());
+    }
     public void GetHit(BaseUnit other)
     {
         if (!isHit)
@@ -81,8 +104,8 @@ public class BaseUnit : MonoBehaviour
             else direc = other.isFacingRight ? -1 : 1;
 
         }
-        rb.linearVelocityX = power.x / weight * direc;
-        rb.linearVelocityY = power.y / weight;
+        rb.linearVelocityX = other.power.x / weight * direc;
+        rb.linearVelocityY = other.power.y / weight;
         isKnockback = true;
         StartCoroutine(Knockback());
     }
@@ -102,7 +125,7 @@ public class BaseUnit : MonoBehaviour
         yield return new WaitForSeconds(0.7f);
         isHit = false;
     }
-    private IEnumerator DieAnimation()
+    public virtual IEnumerator DieAnimation()
     {
         yield return new WaitForSeconds(0.7f);
         rb.simulated = false;

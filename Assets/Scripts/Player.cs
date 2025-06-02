@@ -127,6 +127,12 @@ public class Player : BaseUnit
 			}
 		}
     }
+    public override IEnumerator DieAnimation()
+    {
+        yield return new WaitForSeconds(0.7f);
+        LevelManager.Instance.Respawn();
+        Destroy(gameObject);
+    }
     public override void SetAnimatorParameter()
     {
         base.SetAnimatorParameter();

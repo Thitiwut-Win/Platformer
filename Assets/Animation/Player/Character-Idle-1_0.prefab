@@ -147,7 +147,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 3594218193891235189}
   isGround:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 576
   groundCheck: {fileID: 684858662400633727}
   groundCheckSize: {x: 0.9, y: 0.06}
   isWall:

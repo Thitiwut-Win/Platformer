@@ -15,9 +15,10 @@ public class Lava : MonoBehaviour
     }
     public void OnTriggerEnter2D(Collider2D collider2D)
     {
-        if (collider2D.TryGetComponent(out BaseUnit baseUnit))
+        if (collider2D.TryGetComponent(out Player player))
         {
-            Destroy(baseUnit.gameObject);
+            LevelManager.Instance.Respawn();
         }
+        Destroy(collider2D.gameObject);
     }
 }
