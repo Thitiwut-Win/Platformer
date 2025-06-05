@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FollowPlayer : MonoBehaviour
 {
-    [SerializeField]
+    private new Camera camera;
     private Transform player;
     private float offset = -10;
     private static FollowPlayer _instance;
@@ -12,7 +12,9 @@ public class FollowPlayer : MonoBehaviour
         {
             if (_instance == null)
             {
+#pragma warning disable CS0618 // Type or member is obsolete
                 _instance = FindObjectOfType<FollowPlayer>();
+#pragma warning restore CS0618 // Type or member is obsolete
                 if (_instance == null)
                 {
                     GameObject gameObject = new GameObject("FollowPlayer");
@@ -22,13 +24,10 @@ public class FollowPlayer : MonoBehaviour
             return _instance;
         }
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-
+        camera = transform.GetComponent<Camera>();
     }
-
-    // Update is called once per frame
     void Update()
     {
         transform.position = player.position + new Vector3(0, 0, offset);
@@ -40,5 +39,9 @@ public class FollowPlayer : MonoBehaviour
     public void SetPlayer(Transform transform)
     {
         player = transform;
+    }
+    public void SetCameraSize(float size)
+    {
+        camera.orthographicSize = size;
     }
 }

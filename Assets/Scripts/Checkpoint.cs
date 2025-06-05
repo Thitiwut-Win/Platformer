@@ -9,9 +9,13 @@ public class Checkpoint : MonoBehaviour
     {
         if (collider2D.TryGetComponent(out Player player))
         {
-            isActivated = true;
-            spriteRenderer.color = Color.white;
-            LevelManager.Instance.SetSpawnPosition(transform.position);
+            Activate();
         }
+    }
+    public void Activate()
+    {
+        isActivated = true;
+        spriteRenderer.color = Color.white;
+        LevelManager.Instance.SetSpawnPosition(transform.position);
     }
 }

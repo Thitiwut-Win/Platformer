@@ -12,16 +12,16 @@ public class Enemy : BaseUnit
     private EState eState = EState.IDLE;
     public List<Vector2> moveCycle;
     private Player target;
-    void Start()
+    public virtual void Start()
     {
         StartCoroutine(ChangeDirection());
     }
-    void Update()
+    public virtual void Update()
     {
         SetAnimatorParameter();
         if (hasCooldown && target != null) Attack();
     }
-    public void Attack()
+    public virtual void Attack()
     {
         isAttacking = true;
         hasCooldown = false;

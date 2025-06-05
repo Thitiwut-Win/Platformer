@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
-    [SerializeField]
-    private Enemy enemy;
     public void OnTriggerEnter2D(Collider2D collider2D)
     {
         if (collider2D.TryGetComponent(out Player player))
         {
+            Enemy enemy = transform.parent.GetComponent<Enemy>();
             bool check = false;
             if (player.isFacingRight != enemy.isFacingRight
                 || (enemy.isFacingRight && player.transform.position.x > enemy.transform.position.x)
@@ -19,6 +18,7 @@ public class EnemyAttack : MonoBehaviour
     {
         if (collider2D.TryGetComponent(out Player player))
         {
+            Enemy enemy = transform.parent.GetComponent<Enemy>();
             enemy.SetTarget(null);
         }
     }

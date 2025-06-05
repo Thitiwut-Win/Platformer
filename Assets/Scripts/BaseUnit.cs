@@ -17,6 +17,7 @@ public class BaseUnit : MonoBehaviour
     public float attackCooldown;
     public bool hasCooldown = true;
     public bool isAttacking = false;
+    public bool isSummoned = false;
     protected bool isHit = false;
     protected bool isKnockback = false;
     protected bool isDead = false;
@@ -51,13 +52,12 @@ public class BaseUnit : MonoBehaviour
             isFacingRight = false;
         }
     }
-    public void GetHit(Trap trap)
+    public void GetHit(float damage)
     {
         if (!isHit)
         {
             isHit = true;
-            health -= trap.damage;
-            GetKnockback(trap);
+            health -= damage;
             StartCoroutine(HurtAnimation());
             if (health <= 0 && !isDead)
             {
@@ -66,11 +66,11 @@ public class BaseUnit : MonoBehaviour
             }
         }
     }
-    private void GetKnockback(Trap trap)
+    public void GetKnockback(Vector2 power)
     {
         int direc = isFacingRight ? -1 : 1;
-        rb.linearVelocityX = trap.power.x / weight * direc;
-        rb.linearVelocityY = trap.power.y / weight;
+        rb.linearVelocityX = power.x / weight * direc;
+        rb.linearVelocityY = power.y / weight;
         isKnockback = true;
         StartCoroutine(Knockback());
     }
@@ -129,6 +129,7 @@ public class BaseUnit : MonoBehaviour
     {
         yield return new WaitForSeconds(0.7f);
         rb.simulated = false;
+        LevelManager.Instance.summonCount--;
         yield return new WaitForSeconds(2);
         Destroy(gameObject);
     }

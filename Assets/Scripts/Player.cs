@@ -9,7 +9,7 @@ public class Player : BaseUnit
     private bool isWalled = false;
     private bool isWallSliding = false;
     private bool isWallJumping = false;
-    public List<Enemy> enemyList;
+    public List<BaseUnit> enemyList;
     [SerializeField]
     private SpriteRenderer spriteRenderer;
     [Header("GroundCheck")]
@@ -82,7 +82,7 @@ public class Player : BaseUnit
     private IEnumerator AttackAnimation()
     {
         yield return new WaitForSeconds(preAttackTime);
-        foreach (Enemy enemy in enemyList)
+        foreach (BaseUnit enemy in enemyList)
         {
             enemy.GetHit(this);
         }

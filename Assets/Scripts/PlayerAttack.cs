@@ -17,16 +17,16 @@ public class PlayerAttack : MonoBehaviour
     }
     public void OnTriggerEnter2D(Collider2D collider2D)
     {
-        if (collider2D.TryGetComponent(out Enemy enemy))
-        {
-            player.enemyList.Add(enemy);
-        }
+        BaseUnit baseUnit = null;
+        if (collider2D.TryGetComponent(out Enemy enemy)) baseUnit = enemy;
+        if (collider2D.TryGetComponent(out Boss boss)) baseUnit = boss;
+        if (baseUnit != null) player.enemyList.Add(baseUnit);
     }
     public void OnTriggerExit2D(Collider2D collider2D)
     {
-        if (collider2D.TryGetComponent(out Enemy enemy))
-        {
-            player.enemyList.Remove(enemy);
-        }
+        BaseUnit baseUnit = null;
+        if (collider2D.TryGetComponent(out Enemy enemy)) baseUnit = enemy;
+        if (collider2D.TryGetComponent(out Boss boss)) baseUnit = boss;
+        if (baseUnit != null) player.enemyList.Remove(baseUnit);
     }
 }
