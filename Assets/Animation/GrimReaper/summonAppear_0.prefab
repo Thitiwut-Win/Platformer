@@ -140,7 +140,7 @@ MonoBehaviour:
   attackCooldown: 0
   hasCooldown: 1
   isAttacking: 0
-  isSummoned: 0
+  isSummoned: 1
   animator: {fileID: 8937170901401427083}
   moveTime: 0.5
   waitTime: 0.5

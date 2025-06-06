@@ -50,7 +50,7 @@ public class Player : BaseUnit
             animator.SetBool("IsWallSliding", false);
         }
         // if (!isGrounded) v.y -= 9.81f;
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && !LevelManager.Instance.IsPaused())
             {
                 if (isGrounded)
                 {
@@ -131,6 +131,7 @@ public class Player : BaseUnit
     {
         yield return new WaitForSeconds(0.7f);
         LevelManager.Instance.Respawn();
+        BossAggro.Instance.onDisAggro.Invoke();
         Destroy(gameObject);
     }
     public override void SetAnimatorParameter()

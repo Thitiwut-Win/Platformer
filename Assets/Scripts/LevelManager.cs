@@ -6,6 +6,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private Player playerPrefab;
     private Vector3 spawnPosition;
+    private Player player;
+    [SerializeField]
+    private Boss boss;
     private static LevelManager _instance;
     public static LevelManager Instance
     {
@@ -28,30 +31,61 @@ public class LevelManager : MonoBehaviour
     public List<Checkpoint> checkpoints;
     private int cp = 0;
     public int summonCount = 0;
+    private bool isPaused = false;
     void Awake()
     {
         spawnPosition = transform.position;
     }
-    void Start()
-    {
-        Respawn();
-    }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if(player == null) return;
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            checkpoints[cp].Activate();
-            cp++;
+            if (isPaused) Unpause();
+            else Pause();
         }
+        if (Input.GetKeyDown(KeyCode.P))
+            {
+                checkpoints[cp].Activate();
+                cp++;
+            }
     }
     public void Respawn()
     {
-        Player player = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+        player = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
         FollowPlayer.Instance.SetPlayer(player.transform);
         FollowPlayer.Instance.SetCameraSize(5);
     }
     public void SetSpawnPosition(Vector3 position)
     {
         spawnPosition = position;
+    }
+    public float GetPlayerHealth()
+    {
+        return player.health;
+    }
+    public float GetPlayerHealthPercentage()
+    {
+        return player.health / player.maxHealth;
+    }
+    public float GetBossHealthPercentage()
+    {
+        return boss.health / boss.maxHealth;
+    }
+    public bool IsPaused()
+    {
+        return isPaused;
+    }
+    public void Pause()
+    {
+        isPaused = true;
+        Time.timeScale = 0;
+        BossAggro.Instance.onPaused.Invoke();
+    }
+    public void Unpause()
+    {
+        isPaused = false;
+        Time.timeScale = 1;
+        BossAggro.Instance.onUnpaused.Invoke();
     }
 }

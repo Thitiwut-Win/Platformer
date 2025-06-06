@@ -37,7 +37,7 @@ public class BaseUnit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
     protected void Flip()
     {
@@ -129,7 +129,7 @@ public class BaseUnit : MonoBehaviour
     {
         yield return new WaitForSeconds(0.7f);
         rb.simulated = false;
-        LevelManager.Instance.summonCount--;
+        if (isSummoned) LevelManager.Instance.summonCount--;
         yield return new WaitForSeconds(2);
         Destroy(gameObject);
     }

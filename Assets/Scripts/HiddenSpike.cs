@@ -8,7 +8,7 @@ public class HiddenSpike : Trap
     {
         if (base.OnTriggerEnter2D(collider2D))
         {
-            animator.Play("Base Layer.HiddenSpike", 0, cooldown);
+            animator.Play("Base Layer.HiddenSpike", 0, 0);
             return true;
         }
         return false;

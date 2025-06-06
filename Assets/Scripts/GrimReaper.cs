@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GrimReaper : Boss
 {
-    public float dashSpeedX;
-    public float dashSpeedY;
+    // public float dashSpeedX;
+    // public float dashSpeedY;
     public float skillCooldown;
     public float skillTime;
     public float summonTime;
@@ -31,7 +31,7 @@ public class GrimReaper : Boss
         {
             if (isSkilling || isSummoning) MoveToTarget(0, 0);
             else if (!isDashing) MoveToTarget(speedX, speedY);
-            else MoveToTarget(dashSpeedX, dashSpeedY);
+            // else MoveToTarget(dashSpeedX, dashSpeedY);
             if (hasCooldown)
             {
                 hasCooldown = false;
@@ -39,10 +39,9 @@ public class GrimReaper : Boss
                 while (skill == prevSkill)
                 {
                     skill = Random.Range(0, 3);
-                    prevSkill = skill;
                 }
+                prevSkill = skill;
                 Invoke(Skills[skill], 0);
-                print(Skills[skill]);
                 if (skill <= 1)
                 {
                     isSkilling = true;
@@ -55,12 +54,12 @@ public class GrimReaper : Boss
                 }
                 StartCoroutine(Cooldown());
             }
-            if (isAttacking)
-            {
-                float dist = Vector3.Distance(transform.position, target.transform.position);
-                // if (dist >= 5 && !isDashing) isDashing = true;
-                // if (dist < 5 && isDashing) isDashing = false;
-            }
+            // if (isAttacking)
+            // {
+            //     float dist = Vector3.Distance(transform.position, target.transform.position);
+            //     if (dist >= 5 && !isDashing) isDashing = true;
+            //     if (dist < 5 && isDashing) isDashing = false;
+            // }
         }
         else
         {

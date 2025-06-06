@@ -410,15 +410,13 @@ MonoBehaviour:
   speedY: 0.75
   scale: 5
   isFacingRight: 1
-  preAttackTime: 0.1805
-  attackTime: 0.9025
-  attackCooldown: 1.5
+  preAttackTime: 0.5014
+  attackTime: 1.504
+  attackCooldown: 3
   hasCooldown: 1
   isAttacking: 0
   isSummoned: 0
   animator: {fileID: 4388269131337899583}
-  dashSpeedX: 5
-  dashSpeedY: 1.5
   skillCooldown: 20
   skillTime: 0.333
   summonTime: 0.332

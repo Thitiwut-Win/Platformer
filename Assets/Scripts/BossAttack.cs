@@ -11,7 +11,19 @@ public class BossAttack : MonoBehaviour
             if (player.isFacingRight != boss.isFacingRight
                 || (boss.isFacingRight && player.transform.position.x > boss.transform.position.x)
                 || (!boss.isFacingRight && player.transform.position.x < boss.transform.position.x)) check = true;
-            if (!boss.IsAttacking() && check) boss.Attack();
+            if (!boss.IsAttacking() && check)
+            {
+                // boss.inRange = true;
+                boss.Attack();
+            }
         }
     }
+    // public void OnTriggerExit2D(Collider2D collider2D)
+    // {
+    //     if (collider2D.TryGetComponent(out Player player))
+    //     {
+    //         Boss boss = transform.parent.GetComponent<Boss>();
+    //         boss.inRange = false;
+    //     }
+    // }
 }
