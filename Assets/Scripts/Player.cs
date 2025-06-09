@@ -11,7 +11,7 @@ public class Player : BaseUnit
     private bool isWallJumping = false;
     public List<BaseUnit> enemyList;
     [SerializeField]
-    private SpriteRenderer spriteRenderer;
+    private AudioClip jumpAudio;
     [Header("GroundCheck")]
     [SerializeField]
     private LayerMask isGround;
@@ -30,7 +30,7 @@ public class Player : BaseUnit
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         Move();
-        if (Input.GetMouseButtonDown(0) && hasCooldown) Attack();
+        if (Input.GetMouseButtonDown(0) && hasCooldown && !LevelManager.Instance.IsPaused()) Attack();
         SetAnimatorParameter();
     }
     void Move()
@@ -50,12 +50,13 @@ public class Player : BaseUnit
             animator.SetBool("IsWallSliding", false);
         }
         // if (!isGrounded) v.y -= 9.81f;
-            if (Input.GetKeyDown(KeyCode.Space) && !LevelManager.Instance.IsPaused())
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (isGrounded)
                 {
                     animator.SetBool("IsJumping", true);
                     v.y = speedY;
+                    PlayJumpAudio();
                 }
                 else if (isWallSliding)
                 {
@@ -75,7 +76,6 @@ public class Player : BaseUnit
     {
         isAttacking = true;
         hasCooldown = false;
-        
         StartCoroutine(AttackAnimation());
         StartCoroutine(AttackCooldown());
     }
@@ -133,6 +133,11 @@ public class Player : BaseUnit
         LevelManager.Instance.Respawn();
         BossAggro.Instance.onDisAggro.Invoke();
         Destroy(gameObject);
+    }
+    private void PlayJumpAudio()
+    {
+        audioSource.volume = LevelManager.Instance.GetVolume() / 300f;
+        audioSource.PlayOneShot(jumpAudio);
     }
     public override void SetAnimatorParameter()
     {

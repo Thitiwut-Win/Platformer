@@ -24,9 +24,13 @@ public class BaseUnit : MonoBehaviour
     [SerializeField]
     protected Animator animator;
     protected Rigidbody2D rb;
+    [SerializeField]
+    protected AudioClip audioClip;
+    protected AudioSource audioSource;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
     }
     void Start()
@@ -37,7 +41,7 @@ public class BaseUnit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     protected void Flip()
     {
@@ -132,6 +136,11 @@ public class BaseUnit : MonoBehaviour
         if (isSummoned) LevelManager.Instance.summonCount--;
         yield return new WaitForSeconds(2);
         Destroy(gameObject);
+    }
+    protected void PlayAttackAudio()
+    {
+        audioSource.volume = LevelManager.Instance.GetVolume()/100f;
+        audioSource.PlayOneShot(audioClip);
     }
     public bool IsAttacking()
     {

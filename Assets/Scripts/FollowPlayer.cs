@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FollowPlayer : MonoBehaviour
 {
-    private new Camera camera;
+    private Camera camera;
     private Transform player;
     private float offset = -10;
     private static FollowPlayer _instance;

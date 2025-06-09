@@ -31,24 +31,30 @@ public class LevelManager : MonoBehaviour
     public List<Checkpoint> checkpoints;
     private int cp = 0;
     public int summonCount = 0;
-    private bool isPaused = false;
+    private bool isPaused = true;
+    private int volume = 100;
     void Awake()
     {
         spawnPosition = transform.position;
+        Time.timeScale = 0;
     }
     void Update()
     {
-        if(player == null) return;
+        if (player == null) return;
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused) Unpause();
             else Pause();
         }
         if (Input.GetKeyDown(KeyCode.P))
-            {
-                checkpoints[cp].Activate();
-                cp++;
-            }
+        {
+            checkpoints[cp].Activate();
+            cp++;
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            boss.health = 2;
+        }
     }
     public void Respawn()
     {
@@ -87,5 +93,13 @@ public class LevelManager : MonoBehaviour
         isPaused = false;
         Time.timeScale = 1;
         BossAggro.Instance.onUnpaused.Invoke();
+    }
+    public void SetVolume(int vol)
+    {
+        volume = vol;
+    }
+    public int GetVolume()
+    {
+        return volume;
     }
 }

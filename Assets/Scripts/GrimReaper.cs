@@ -24,6 +24,8 @@ public class GrimReaper : Boss
     private Enemy summonPrefab;
     [SerializeField]
     private Fireball fireballPrefab;
+    [SerializeField]
+    private AudioClip skillAudio;
     public override void Update()
     {
         base.Update();
@@ -41,6 +43,7 @@ public class GrimReaper : Boss
                     skill = Random.Range(0, 3);
                 }
                 prevSkill = skill;
+                PlaySkillAudio();
                 Invoke(Skills[skill], 0);
                 if (skill <= 1)
                 {
@@ -123,6 +126,11 @@ public class GrimReaper : Boss
     {
         yield return new WaitForSeconds(6);
         FollowPlayer.Instance.SetCameraSize(5);
+    }
+    private void PlaySkillAudio()
+    {
+        audioSource.volume = LevelManager.Instance.GetVolume()/300f;
+        audioSource.PlayOneShot(skillAudio);
     }
     public override void SetAnimatorParameter()
     {

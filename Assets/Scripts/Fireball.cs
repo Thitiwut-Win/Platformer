@@ -13,9 +13,13 @@ public class Fireball : MonoBehaviour
     private bool isHit = false;
     [SerializeField]
     private Animator animator;
+    [SerializeField]
+    protected AudioClip audioClip;
+    protected AudioSource audioSource;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
     }
     void Start()
     {
@@ -43,6 +47,8 @@ public class Fireball : MonoBehaviour
     {
         isHit = true;
         rb.simulated = false;
+        audioSource.volume = LevelManager.Instance.GetVolume()/200f;
+        audioSource.PlayOneShot(audioClip);
         if (collider2D.TryGetComponent(out Player player))
         {
             player.GetHit(damage);

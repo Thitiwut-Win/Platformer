@@ -40,8 +40,8 @@ public class Boss : BaseUnit
     {
         yield return new WaitForSeconds(0.7f);
         rb.simulated = false;
-        Time.timeScale = 0;
         BossAggro.Instance.onBossDied.Invoke();
+        Time.timeScale = 0;
     }
     public void SetTarget(Player player)
     {
