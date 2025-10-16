@@ -11,7 +11,7 @@ public class SettingUI : MonoBehaviour
     private int volume;
     void Update()
     {
-        volume = (int)(slider.value * 100);
+        volume = (int)slider.value;
         volumePercentage.SetText(volume + "%");
         SetVolume();
     }

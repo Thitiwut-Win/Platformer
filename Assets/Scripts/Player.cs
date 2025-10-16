@@ -137,7 +137,9 @@ public class Player : BaseUnit
     private void PlayJumpAudio()
     {
         audioSource.volume = LevelManager.Instance.GetVolume() / 300f;
-        audioSource.PlayOneShot(jumpAudio);
+        audioSource.clip = jumpAudio;
+        audioSource.time = 0.15f;
+        audioSource.Play();
     }
     public override void SetAnimatorParameter()
     {

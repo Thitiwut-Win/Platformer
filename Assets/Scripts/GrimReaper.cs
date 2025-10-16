@@ -97,10 +97,14 @@ public class GrimReaper : Boss
     private void Teleport()
     {
         float dist = Random.Range(4, 6);
-        List<int> direc = new List<int> { -1, 1 };
-        int direcx = Random.Range(0, 2);
-        int direcy = Random.Range(0, 2);
-        transform.position = new Vector3(target.transform.position.x + dist * direcx, target.transform.position.y + dist * direcy, 0);
+        List<int> direc = new List<int> { -1, 0, 1 };
+        int direcx = Random.Range(0, 3);
+        int direcy = Random.Range(0, 3);
+        while (direcx == direcy)
+        {
+            direcy = Random.Range(0, 3);
+        }
+        transform.position = new Vector3(target.transform.position.x + dist * direc[direcx], target.transform.position.y + dist * direc[direcy], 0);
     }
     private void Shoot()
     {
